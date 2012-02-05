@@ -36,12 +36,7 @@
 
 	\subsection{OpenGL examples}
 	In the text that follows, we use some OpenGL examples to illustrate how the transformations are performed using OpenGL functions. All transformations are being applied to a square of edge length 1 centred at (0,0), unless stated otherwise. 	
-	\begin{figure}
-		\centering
-		\includegraphics[height=80mm]{Images_final/Square.jpg}
-		\caption{A square drawn using OpenGL.}
-	\end{figure}
-	\\
+\\
 	Following is the part of the code to construct the square in discussion. 
 	\begin{code}
 		glPushMatrix ();
@@ -55,7 +50,13 @@
 	\end{code}
 	
 	In the discussions that follow, only the transformation code is provided which has to be used before plotting the vertices (\emph{glVertex2f}) but after pushing the matrix using \emph{glPushMatrix}
-
+	\begin{figure}
+		\centering
+		\includegraphics[height=80mm]{Images_final/Square.jpg}
+		\caption{A square drawn using OpenGL.}
+		\label{fig:simple_square}
+	\end{figure}
+	
 \pagebreak
 \section{Translation}
 	\subsection{Introduction}
@@ -93,9 +94,10 @@
 		
 	\subsection{Translation in OpenGL}
 		\begin{figure}
+			\centering
 			\includegraphics[height=80mm]{Images_final/Translated_square.jpg}
-			\label{fig:translated}
 			\caption{Translated square}
+			\label{fig:translated}
 		\end{figure}
 		Translation can be achieved in OpenGL using the function \emph{glTranslate}. \\ \\
 		The same could be achieved using the transformation matrix described in \eqref{translation_eq}.
@@ -117,20 +119,60 @@
 \pagebreak
 \pagebreak
 \section{Scaling}
-\emph{Scaling} a coordinate means multiplying each of its components by a scalar. 
+	\subsection{Introduction}
+	\emph{Scaling} a coordinate means multiplying each of its components by a scalar. The operation can be carried out for polygons by multiplying the coordinate values $(x,y)$ of each vertex by scaling factors $s_x$ and $s_y$ to produce the transformed coordinates $(x^{'},y^{'})$ :-
+	\begin{equation*}
+		x^{'} = x \cdot s_x 
+	\end{equation*}
+	\begin{equation*}
+		y^{'} = y \cdot s_y
+	\end{equation*}
+	\begin{equation*}
+		z^{'} = z \cdot s_z
+	\end{equation*}
 
+	When $s_x$ and $s_y$ (and $s_z$ in case of 3D scaling) are equal, it is called \textbf{uniform scaling}. This can be represented in the form of the following transformation :-
+	\begin {equation}
+		\begin{bmatrix}
+			c & 0 & 0 & 0 \\
+			0 & c & 0 & 0 \\
+			0 & 0 & c & 0 \\
+			0 & 0 & 0 & 1
+		\end{bmatrix}
+		\\ where\, c = s_x = s_y = s_z
+		\label{eq:scaling}
+	\end{equation}
 
-\begin {equation*}
-	\begin{bmatrix}
-		c & 0 & 0 & 0 \\
-		0 & c & 0 & 0 \\
-		0 & 0 & c & 0 \\
-		0 & 0 & 0 & 1
-	\end{bmatrix}
-\end{equation*}
+	When $s_x$, $s_y$ and $s_z$ are unequal, it is called \textbf{differential scaling}.
+
+	\begin{figure}
+		\includegraphics[height=80mm]{Images_final/Square_scaled.jpg}
+		\caption{Uniform scaling in OpenGL}
+		\label{fig:uniform_scaling}
+	\end{figure}
+
+	\subsection{Scaling in OpenGL}
+	Scaling could be achieved in OpenGL using \emph{glScale} function.\\ \\
+	The same could be achieved multiplying it with a matrix as in \eqref{eq:scaling}. The code for the same is as follows :-
+	\begin{code}
+		GLdouble c   = 3;
+		GLdouble scale_matrix[] = { c, 0, 0, 0, 
+					    0, c, 0, 0,
+					    0, 0, 1, 0, 
+					    0, 0, 0, 1};
+		glMultMatrixd (scale_matrix);
+	\end{code}
+
+	An example of differential scaling is Figure : \ref{fig:differential_scaling}.
+	\begin{figure}
+		\includegraphics[height=80mm]{Images_final/Square_non_uniform_scaling.jpg}
+		\caption{Differential Scaling in OpenGL}
+		\label{fig:differential_scaling}
+	\end{figure}
 
 \pagebreak
 \section{2D Rotation}
+
 A \emph{2D Rotation} is applied to an object by repositioning it along a circular path in any of the three x-y, y-z or z-x planes.
 
 \pagebreak
