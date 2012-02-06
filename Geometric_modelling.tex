@@ -172,9 +172,32 @@
 
 \pagebreak
 \section{2D Rotation}
+	\subsection{Introduction}
+	A \emph{2D Rotation} is applied to an object by repositioning it along a circular path in any of the three x-y, y-z or z-x planes. Rotation in x-y plane, for instance, can be achieved by the following transformation :-
+	\begin{equation}
+		\begin{bmatrix}
+			cos \theta & -sin \theta \\
+			sin \theta &  cos \theta 
+		\end{bmatrix}
+	\end{equation}
 
-A \emph{2D Rotation} is applied to an object by repositioning it along a circular path in any of the three x-y, y-z or z-x planes.
+	\subsection {Rotation using OpenGL}
 
+	\begin{code}
+		GLdouble theta = (3.1415 / 4);		// (\pi)/4
+		GLdouble rotation_matrix_z[] = { cos(theta), sin(theta), 0, 0, 
+						-sin(theta), cos(theta), 0, 0, 
+						0, 0, 1, 0,
+						0, 0, 0, 1 };
+
+		glMultMatrixd (rotation_matrix_z);
+	\end{code}
+
+	\begin{figure}
+		\includegraphics[height=80mm]{Images_final/Rotated_square.jpg}
+		\caption{Rotation in OpenGL}
+		\label{fig:rotation}
+	\end{figure}
 \pagebreak
 \section{Reflection}
 A \emph{reflection} is a transformation that produces the mirror image of an object relative to an axis of reflection by rotating the object $180^\circ$ about the reflection axis. 
@@ -183,4 +206,5 @@ A \emph{reflection} is a transformation that produces the mirror image of an obj
 A \emph{transformation} that distorts the shape of an object such that the transformed shape appears as if the object were composed of internal layers that had been caused to slide over each other.
 
 \pagebreak
+
 \end{document}
