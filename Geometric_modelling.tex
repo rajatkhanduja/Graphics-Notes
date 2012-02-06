@@ -37,6 +37,7 @@
 	\subsection{OpenGL examples}
 	In the text that follows, we use some OpenGL examples to illustrate how the transformations are performed using OpenGL functions. All transformations are being applied to a square of edge length 1 centred at (0,0), unless stated otherwise. 	
 \\
+\\
 	Following is the part of the code to construct the square in discussion. 
 	\begin{code}
 		glPushMatrix ();
@@ -48,15 +49,26 @@
 		glEnd ();
 		glPopMatrix ();
 	\end{code}
-	
-	In the discussions that follow, only the transformation code is provided which has to be used before plotting the vertices (\emph{glVertex2f}) but after pushing the matrix using \emph{glPushMatrix}
-	\begin{figure}
+	\begin{figure}[h]
 		\centering
-		\includegraphics[height=80mm]{Images_final/Square.jpg}
+		\includegraphics[height=50mm]{Images_final/Square.jpg}
 		\caption{A square drawn using OpenGL.}
 		\label{fig:simple_square}
 	\end{figure}
-	
+	In the discussions that follow, only the transformation code is provided which has to be used before plotting the vertices (\emph{glVertex2f}) but after pushing the matrix using \emph{glPushMatrix}. To apply the transformation by multiplying the matrices, we use the OpenGL function \emph{glMultMatrix}. For instance, forotation, we would use something as follows ($rotation_matrix$ is assumed to be defined) :-
+	\begin{code}
+		glPushMatrix ();
+		glBegin (GL_POLYGON);
+		glMultMatrix (rotation_matrix);
+		glVertex2f (-0.5, -0.5);
+		glVertex2f (-0.5, 0.5 );
+		glVertex2f ( 0.5, 0.5 );
+		glVertex2f ( 0.5, -0.5);
+		glEnd ();
+		glPopMatrix ();
+	\end{code}
+
+		
 \pagebreak
 \section{Translation}
 	\subsection{Introduction}
@@ -93,9 +105,9 @@
 %	\begin{bmatrix}
 		
 	\subsection{Translation in OpenGL}
-		\begin{figure}
+		\begin{figure}[h]
 			\centering
-			\includegraphics[height=80mm]{Images_final/Translated_square.jpg}
+			\includegraphics[height=50mm]{Images_final/Translated_square.jpg}
 			\caption{Translated square}
 			\label{fig:translated}
 		\end{figure}
@@ -145,15 +157,23 @@
 
 	When $s_x$, $s_y$ and $s_z$ are unequal, it is called \textbf{differential scaling}.
 
-	\begin{figure}
-		\includegraphics[height=80mm]{Images_final/Square_scaled.jpg}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[height=50mm]{Images_final/Square_scaled.jpg}
 		\caption{Uniform scaling in OpenGL}
 		\label{fig:uniform_scaling}
 	\end{figure}
 
+	\begin{figure}[h]
+		\centering
+		\includegraphics[height=50mm]{Images_final/Square_non_uniform_scaling.jpg}
+		\caption{Differential Scaling in OpenGL}
+		\label{fig:differential_scaling}
+	\end{figure}
 	\subsection{Scaling in OpenGL}
 	Scaling could be achieved in OpenGL using \emph{glScale} function.\\ \\
 	The same could be achieved multiplying it with a matrix as in \eqref{eq:scaling}. The code for the same is as follows :-
+	
 	\begin{code}
 		GLdouble c   = 3;
 		GLdouble scale_matrix[] = { c, 0, 0, 0, 
@@ -164,12 +184,7 @@
 	\end{code}
 
 	An example of differential scaling is Figure : \ref{fig:differential_scaling}.
-	\begin{figure}
-		\includegraphics[height=80mm]{Images_final/Square_non_uniform_scaling.jpg}
-		\caption{Differential Scaling in OpenGL}
-		\label{fig:differential_scaling}
-	\end{figure}
-
+	
 \pagebreak
 \section{2D Rotation}
 	\subsection{Introduction}
@@ -183,6 +198,13 @@
 
 	\subsection {Rotation using OpenGL}
 
+	\begin{figure}
+		\centering
+		\includegraphics[height=50mm]{Images_final/Rotated_square.jpg}
+		\caption{Rotation in OpenGL}
+		\label{fig:rotation}
+	\end{figure}
+
 	\begin{code}
 		GLdouble theta = (3.1415 / 4);		// (\pi)/4
 		GLdouble rotation_matrix_z[] = { cos(theta), sin(theta), 0, 0, 
@@ -193,17 +215,62 @@
 		glMultMatrixd (rotation_matrix_z);
 	\end{code}
 
-	\begin{figure}
-		\includegraphics[height=80mm]{Images_final/Rotated_square.jpg}
-		\caption{Rotation in OpenGL}
-		\label{fig:rotation}
-	\end{figure}
 \pagebreak
 \section{Reflection}
-A \emph{reflection} is a transformation that produces the mirror image of an object relative to an axis of reflection by rotating the object $180^\circ$ about the reflection axis. 
+	\subsection{Introduction}
+	A \emph{reflection} is a transformation that produces the mirror image of an object relative to an axis of reflection by rotating the object $180^\circ$ about the reflection axis. The axis could be any vector. For simplicity, we will consider only x, y and z axes as the axes of reflection. 
+\\ 
+	Reflection about y-axis can be achieved by the following transform :-
+	\begin{equation}
+		\begin{bmatrix}
+			-1 & 0 & 0 & 0 \\
+			 0 & 1 & 0 & 0 \\
+			 0 & 0 & 1 & 0 \\
+			 0 & 0 & 0 & 1
+		\end{bmatrix}
+		\label{eq:reflection}
+	\end{equation}
+
+	\subsection{Reflection in OpenGL}
+		There is no direct function for reflection in OpenGL, but it can be obtained using \emph{glScale}. For instance, reflection about y can be obtained by
+	\begin{code}
+		glScale (-1.f, 1.f, -1.f);
+	\end{code}
+	Same effect could be achieved by \emph{rotating} the figure using \emph{glRotate} by $180^\circ$.\\
+	\begin{figure}[h]
+		\centering
+		\includegraphics[height=50mm]{Images_final/mirror_along_y.jpg}
+		\caption{Reflection about y-axis in OpenGL. This image shows both the image and its reflection.}
+		\label{fig:reflection}
+	\end{figure}
+	Using the transformation given in Eq : \eqref{eq:reflection}, reflection can be achieved in OpenGL as follows :-
+	\begin{code}
+		GLdouble reflection_about_y[] = {-1, 0, 0, 0,
+						  0, 1, 0, 0, 
+						  0, 0, 1, 0,
+						  0, 0, 0, 1};
+		glMultMatrixd (reflection_about_y);
+	\end{code}
+
 \pagebreak
 \section{Shear}
-A \emph{transformation} that distorts the shape of an object such that the transformed shape appears as if the object were composed of internal layers that had been caused to slide over each other.
+	\subsection{Introduction}
+	A \emph{transformation} that distorts the shape of an object such that the transformed shape appears as if the object were composed of internal layers that had been caused to slide over each other.
+
+	\subsection{Shear in OpenGL}
+	
+	\begin{figure}
+		\centering
+		\includegraphics[height=50mm]{Images_final/shear_square.jpg}
+		\includegraphics[height=50mm]{Images_final/shear_square_along_y.jpg}
+		\caption{Shear transformation in OpenGL}
+		\label{fig:shear}
+	\end{figure}
+
+	\begin{code}
+
+	\end{code}
+
 
 \pagebreak
 
