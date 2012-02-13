@@ -268,10 +268,111 @@
 	\end{figure}
 
 	\begin{code}
-
+		GLdouble shear_matrix[] = {1,    sh_y,  0,   0, 
+					   sh_x, 1,     0,   0, 
+					   0,    0,     1,   0, 
+					   0,    0,     0,   1};
+		glMultMatrixd (shear_matrix);
 	\end{code}
 
 
 \pagebreak
+\Section{Affine Transformations}
+	\subsection{Introduction}
+	In geometry, an \emph{affine transformation} is a transformation which preserves straight lines (i.e., all points lying on a line initially still lie on a line after transformation) and ratios of distances (e.g., the midpoint of a line segment remains the midpoint after transformation). While an affine transformation preservesproportions on lines, it does not necessarily preserve angles or lengths.
+	\begin{itemize}
+	\item	Origin does not necessarily map to origin.
+	\item	Lines map to lines.
+	\item	Parallel lines remain parallel.
+	\item	Ratios are preserved.
+	\item	Closed under composition.
+	\end{itemize}
+\pagebreak
+\section{Projective Transformations}
+	\subsection{Introduction}
+	A projective transformation is a transformation used in projective geometry: it is the composition of a pair of perspective projections. 
+	It describes what happens to the perceived positions of observed objects when the point of view of the observer changes. Projective transformations 
+	do not preserve sizes or angles but do preserve incidence and cross-ratio: two properties which are important in projective geometry.
+	\begin{itemize}
+	\item	Origin does not necessarily map to origin.
+	\item	Lines map to lines.
+	\item	Parallel lines \emph{do not} necessarily remain parallel.
+	\item	Ratios are \textbf{NOT} preserved.
+	\item	Closed under composition.
+	\end{itemize}
+\pagebreak
+\section{Matrix Composition}
+	\subsection{Introduction}
+	Transformations can be combined with matrix multipication. In OpenGL the glMultMatrix* family is used to perform matrix composition operations.
+\section{3D Transformation}
+	\subsection{Introduction}
+	Projective Transformations can be represented easily using Homogeneous coordinates. Homogeneous coordinates for 3D Transformations :
+	\begin{equation}
+		\begin{bmatrix}
+		x & y & z & w
+		\end{bmatrix}
+	\label{Homogeneous Coordinates}
+	\end{equation}
+	\subsection{Basic 3D Transformations}
+	\begin{itemize}
+	\item	\underline{Scale} \\
+		\begin{equation}
+			\begin{bmatrix}
+			s_{x} & 0 & 0 & 0 \\
+			0 & s_{y} & 0 & 0 \\
+			0 & 0 & s_{z} & 0 \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}
+		\end{equation}
+	\item	\underline{Translation} \\
+		\begin{equation}
+			\begin{bmatrix}
+			0 & 0 & 0 & t_{x} \\
+			0 & 0 & 0 & t_{y} \\
+			0 & 0 & 0 & t_{z} \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}
+		\end{equation}
+	\item	\underline{Mirror about Y/Z plane} \\
+		\begin{equation}
+			\begin{bmatrix}
+			-1 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 \\
+			0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}
+		\end{equation}
+	\end{itemize}
+	\pagebreak
+	\subsubsection{Rotation}
+	\item	\underline{Rotation around Z-axis} \\
+		\begin{equation}
+			\begin{bmatrix}
+			cos(\theta) & -sin(\theta) & 0 & 0 \\
+			sin(\theta) & cos(\theta) & 0 & 0 \\
+			0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}
+		\end{equation}
+	\item	\underline{Rotation around Y axis} \\
+		\begin{equation}
+			\begin{bmatrix}
+			cos(\theta) & 0 & sin(\theta) & 0 \\
+			0 & 1 & 0 & 0 \\
+			-sin(\theta) & 0 & cos(\theta) & 0 \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}
+		\end{equation}
 
+	\item	\underline{Rotation around X axis} \\
+		\begin{equation}
+			\begin{bmatrix}
+			1 & 0 & 0 & 0 \\
+			0 & cos(\theta) & -sin(\theta) & 0 \\
+			0 & sin(\theta) & cos(\theta) & 0 \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}
+		\end{equation}
+	\end{itemize}
+\pagebreak
 \end{document}
